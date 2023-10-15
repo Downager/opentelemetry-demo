@@ -13,8 +13,8 @@ python3 app.py
 
 ## Example requests
 ```
-❯ curl localhost:5000/
+❯ curl localhost:8080/
 Hello, world!
-❯ curl localhost:5000/another
+❯ curl localhost:8080/another
 This is another endpoint!
 ```
