@@ -1,0 +1,8 @@
+# OS generated files
+.DS_Store
+
+# Grafana Tempo Data
+tempo-data/
+
+# Python Virtual Environment
+venv/
