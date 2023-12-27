@@ -1,0 +1,168 @@
+{
+  "google_scholar": {
+    "query": "",
+    "pagination": true
+  },
+  "openai": {
+    "language": "traditional chinese",
+    "data_path": "./datarun/{project_name}/keyword_extraction/data_output_KE.json",
+    "extract_title": true,
+    "extract_abstract": false,
+    "openai.api_key": ""
+  },
+  "category": {
+    "english_output_path": "datarun/{project_name}/category/english_output.json",
+    "chinese_output_path": "datarun/{project_name}/category/chinese_output.json"
+  },
+  "report": {
+  },
+  "findpaper": {
+    "limit": 3000,
+    "databases": [
+      "arxiv"
+    ],
+    "query": "[Knowledge Graph] AND [gpt]",
+    "scopus_api_token": "0641fff7106456512aea5dac5340545c",
+    "limit_per_database": 1000,
+    "verbose": true,
+    "since_days": 1095
+  },
+  "bert_keyword_extraction": {
+    "is_chinese": true,
+    "model_name": "ckiplab/bert-base-chinese-ner",
+    "corpus_source": [
+      "title",
+      "abstract"
+    ],
+    "threshold": 0,
+    "source_data": "datarun/{project_name}/data/output.json",
+    "save_keyword_extraction": true
+  },
+  "bert_paraphrases_mining": {
+    "agglomerative_clustering_distance_threshold": 0,
+    "source_data": "datarun/{project_name}/pre_process/data_output.json",
+    "source_corpus": "datarun/{project_name}/pre_process/corpus_output.json",
+    "model_name": "all-MiniLM-L6-v2",
+    "paraphrases_path": "datarun/{project_name}/bert_paraphrases_mining",
+    "paraphrases_threshold": 0,
+    "entity_keyword_limit": 20,
+    "merge_similarities_word_repeat": 0
+  },
+  "word_preprocess": {
+    "exclude_words": [
+    ],
+    "add_subject_areas": false,
+    "word_max_len": 30,
+    "keyword_extraction": "gpt",
+    "edit_distance_threshold": 2,
+    "paraphrases_threshold": 0,
+    "model_name": "ckiplab/bert-base-chinese-ner",
+    "english_edit_distance_threshold": 10,
+    "english_paraphrases_threshold": 0,
+    "english_model_name": "all-MiniLM-L6-v2",
+    "process_augmentation": false,
+    "source_data": "datarun/{project_name}/keyword_extraction/data_output.json",
+    "lemmatized_exclude": [
+      "gpt",
+      "male",
+      "國人",
+      "level",
+      "年",
+      "一",
+      "二",
+      "三",
+      "四",
+      "五",
+      "六",
+      "七",
+      "八",
+      "九",
+      "十"
+    ]
+  },
+  "organize_categories": {
+    "number_of_subcategories": 60
+  },
+  "cluster": {
+    "source_data": "datarun/{project_name}/keyword_extraction/data_output.json",
+    "source_corpus": "datarun/{project_name}/keyword_extraction/corpus_output.json",
+    "cooccur_matrix_path": "datarun/{project_name}/cluster/cooccur_matrix.xlsx",
+    "norm_matrix_path": "datarun/{project_name}/cluster/norm_matrix.xlsx",
+    "similarity_matrix_path": "datarun/{project_name}/cluster/similarity_matrix.xlsx",
+    "cluster_result_path": "datarun/{project_name}/cluster/cluster.xlsx",
+    "word_counts_path": "datarun/{project_name}/cluster/word_counts.txt",
+    "cluster_result_text_path": "datarun/{project_name}/cluster/cluster.txt",
+    "minimal_word_frequency": 1,
+    "save_cooccur_matrix": false,
+    "save_norm_matrix": false,
+    "save_similarity_matrix": false,
+    "save_cluster_result": false,
+    "num_clusters": 60,
+    "repeats": 10,
+    "cluster_path": "datarun/{project_name}/cluster/cluster.json",
+    "filted_cooccur_path": "datarun/{project_name}/cluster/filted_cooccur.json"
+  },
+  "build_map": {
+    "datarun_id": "",
+    "uri": "neo4j+s://a597625d.databases.neo4j.io",
+    "user": "neo4j",
+    "password": "ak590OpsHi1xZ_CUa_UkjM4zriAaBmpVazsrlCOx-a0",
+    "sql_query_path": "datarun/{project_name}/data",
+    "database_name": "neo4j",
+    "source_data": "datarun/{project_name}/cluster/data_output.json",
+    "source_corpus": "datarun/{project_name}/cluster/corpus_output.json",
+    "source_vocab": "datarun/{project_name}/cluster/vocab_output.json",
+    "concurrency_weight": {
+      "very_low": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "low": [
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "medium": [
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30
+      ],
+      "high": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42
+      ],
+      "very_high": 43
+    }
+  }
+}

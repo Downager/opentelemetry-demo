@@ -1,0 +1,224 @@
+﻿[
+  {
+    "p": {
+      "start": {
+        "identity": 517,
+        "labels": [
+          "cluster_0"
+        ],
+        "properties": {
+          "cluster_number": 0,
+          "name": "回顧",
+          "years": [
+            2009,
+            2020,
+            2021,
+            2020,
+            2010,
+            2010,
+            2009,
+            2006,
+            2004
+          ],
+          "frequency": 9
+        },
+        "elementId": "517"
+      },
+      "end": {
+        "identity": 539,
+        "labels": [
+          "cluster_0"
+        ],
+        "properties": {
+          "cluster_number": 0,
+          "name": "展望",
+          "years": [
+            2009,
+            2020,
+            2021,
+            2020,
+            2010,
+            2010,
+            2009,
+            2004
+          ],
+          "frequency": 8
+        },
+        "elementId": "539"
+      },
+      "segments": [
+        {
+          "start": {
+            "identity": 517,
+            "labels": [
+              "cluster_0"
+            ],
+            "properties": {
+              "cluster_number": 0,
+              "name": "回顧",
+              "years": [
+                2009,
+                2020,
+                2021,
+                2020,
+                2010,
+                2010,
+                2009,
+                2006,
+                2004
+              ],
+              "frequency": 9
+            },
+            "elementId": "517"
+          },
+          "relationship": {
+            "identity": 14064,
+            "start": 517,
+            "end": 539,
+            "type": "cooccur_high",
+            "properties": {
+              "concurrency_weight": 8
+            },
+            "elementId": "14064",
+            "startNodeElementId": "517",
+            "endNodeElementId": "539"
+          },
+          "end": {
+            "identity": 539,
+            "labels": [
+              "cluster_0"
+            ],
+            "properties": {
+              "cluster_number": 0,
+              "name": "展望",
+              "years": [
+                2009,
+                2020,
+                2021,
+                2020,
+                2010,
+                2010,
+                2009,
+                2004
+              ],
+              "frequency": 8
+            },
+            "elementId": "539"
+          }
+        }
+      ],
+      "length": 1.0
+    }
+  },
+  {
+    "p": {
+      "start": {
+        "identity": 539,
+        "labels": [
+          "cluster_0"
+        ],
+        "properties": {
+          "cluster_number": 0,
+          "name": "展望",
+          "years": [
+            2009,
+            2020,
+            2021,
+            2020,
+            2010,
+            2010,
+            2009,
+            2004
+          ],
+          "frequency": 8
+        },
+        "elementId": "539"
+      },
+      "end": {
+        "identity": 517,
+        "labels": [
+          "cluster_0"
+        ],
+        "properties": {
+          "cluster_number": 0,
+          "name": "回顧",
+          "years": [
+            2009,
+            2020,
+            2021,
+            2020,
+            2010,
+            2010,
+            2009,
+            2006,
+            2004
+          ],
+          "frequency": 9
+        },
+        "elementId": "517"
+      },
+      "segments": [
+        {
+          "start": {
+            "identity": 539,
+            "labels": [
+              "cluster_0"
+            ],
+            "properties": {
+              "cluster_number": 0,
+              "name": "展望",
+              "years": [
+                2009,
+                2020,
+                2021,
+                2020,
+                2010,
+                2010,
+                2009,
+                2004
+              ],
+              "frequency": 8
+            },
+            "elementId": "539"
+          },
+          "relationship": {
+            "identity": 14065,
+            "start": 539,
+            "end": 517,
+            "type": "cooccur_high",
+            "properties": {
+              "concurrency_weight": 8
+            },
+            "elementId": "14065",
+            "startNodeElementId": "539",
+            "endNodeElementId": "517"
+          },
+          "end": {
+            "identity": 517,
+            "labels": [
+              "cluster_0"
+            ],
+            "properties": {
+              "cluster_number": 0,
+              "name": "回顧",
+              "years": [
+                2009,
+                2020,
+                2021,
+                2020,
+                2010,
+                2010,
+                2009,
+                2006,
+                2004
+              ],
+              "frequency": 9
+            },
+            "elementId": "517"
+          }
+        }
+      ],
+      "length": 1.0
+    }
+  }
+]
