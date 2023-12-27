@@ -17,6 +17,8 @@ services:
     environment:
       - "OTLP_ENDPOINT=tempo:4317"
       - "DB_SERVICE_URL=http://db-service:5001"
+    depends_on:
+      - db-service
 
   db-service:
     build: ./database-service
