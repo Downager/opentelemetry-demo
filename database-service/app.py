@@ -1,21 +1,18 @@
 # Standard library imports
 from os import getenv
-import json
 import socket
 
 # Third-party imports
-from flask import Flask, render_template, request
-from flask_restful import Resource, Api
+from flask import Flask, request, jsonify
 from neo4j import GraphDatabase, basic_auth
 
 # OpenTelemetry imports
 from opentelemetry import trace
-from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 from opentelemetry.instrumentation.flask import FlaskInstrumentor
 import opentelemetry.sdk.resources
-
 
 # Getting the hostname
 hostname = socket.gethostname()
@@ -30,18 +27,18 @@ except socket.gaierror:
 # Initialize TracerProvider
 opentelemetry_resource = opentelemetry.sdk.resources.Resource(
     attributes={
-        "service.name": "python-example-app",
+        "service.name": "database-service",
         "host.name": hostname,
         "host.ip": ip_address,
     }
 )
+
 trace.set_tracer_provider(TracerProvider(resource=opentelemetry_resource))
 
 # Initialize OTLP exporter and BatchSpanProcessor
 oltp_endpoint = getenv("OTLP_ENDPOINT", default="localhost:4317")
 otlp_exporter = OTLPSpanExporter(endpoint=oltp_endpoint, insecure=True)
 span_processor = BatchSpanProcessor(otlp_exporter)
-
 trace.get_tracer_provider().add_span_processor(span_processor)
 
 # Get a tracer
@@ -49,13 +46,11 @@ tracer = trace.get_tracer(__name__)
 
 # Initialize Flask app
 app = Flask(__name__)
-api = Api(app)
 
 # Auto-instrument flask
 FlaskInstrumentor().instrument_app(app)
 
-import json
-
+# Initialize Neo4j connection
 driver = GraphDatabase.driver(
     "neo4j+s://1e02c965.databases.neo4j.io",
     auth=basic_auth("neo4j", "zbvV0gWwxbcXrnlIgoAy_LpzZTvc2PatWuKiA0fDsSc"),
@@ -115,8 +110,10 @@ def convert_to_graph(results, selected):
     return return_data
 
 
-class Graph_Data(Resource):
-    def post(self):
+@app.route("/graph_data", methods=["POST"])
+def graph_data():
+    with tracer.start_as_current_span("graph_data_endpoint") as span:
+        data = request.get_json()
         with tracer.start_as_current_span("post graph data") as span:
             data = request.get_json()
             selected = data["selected"]
@@ -170,11 +167,13 @@ class Graph_Data(Resource):
                 execute_span.set_attribute("result_count", len(results))
 
             print("COUNT", len(results))
-            return convert_to_graph(results, selected)
+            result = convert_to_graph(results, selected)
+        return jsonify(result)
 
 
-class Graph_Data_Select(Resource):
-    def get(self):
+@app.route("/graph_data_select", methods=["GET"])
+def graph_data_select():
+    with tracer.start_as_current_span("graph_data_select_endpoint") as span:
         with tracer.start_as_current_span("get graph data select") as select_span:
             datarun_id = None
             cond = ""
@@ -227,100 +226,8 @@ class Graph_Data_Select(Resource):
             select_span.set_attribute(
                 "transformed_results_count", len(transformed_results)
             )
-            return transformed_results
-
-
-class Graph_Data_Select(Resource):
-    def get(self):
-        with tracer.start_as_current_span("get graph data select") as select_span:
-            datarun_id = None
-            cond = ""
-            if datarun_id:
-                cond += f"AND n.datarun_id='{datarun_id}'"
-                select_span.set_attribute("datarun_id", datarun_id)
-            else:
-                select_span.set_attribute("datarun_id", "none")
-
-            cypher_query = f"""
-            MATCH (n) WHERE NOT 'title' IN labels(n) AND n.frequency > 15 {cond} RETURN n.name, n.cluster_number, n.frequency 
-            """
-            select_span.set_attribute("cypher_query", cypher_query)
-
-            with tracer.start_as_current_span("execute cypher query") as execute_span:
-                with driver.session(database="neo4j") as session:
-                    results = session.execute_read(
-                        lambda tx: tx.run(cypher_query).data()
-                    )
-                execute_span.set_attribute("result_count", len(results))
-
-            def transform_result_to_optgroups(input_result):
-                with tracer.start_as_current_span("transform result") as transform_span:
-                    grouped_dict = {}
-                    for res in input_result:
-                        if res["n.cluster_number"] not in grouped_dict:
-                            grouped_dict[res["n.cluster_number"]] = []
-                        grouped_dict[res["n.cluster_number"]].append(
-                            {
-                                "label": res["n.name"] + f' ({res["n.frequency"]})',
-                                "value": res["n.name"],
-                            }
-                        )
-
-                    optgroups = []
-                    for cluster_key in sorted(grouped_dict.keys()):
-                        optgroups.append(
-                            {
-                                "label": "cluster_number_" + str(cluster_key),
-                                "children": grouped_dict[cluster_key],
-                            }
-                        )
-
-                    transform_span.set_attribute(
-                        "number_of_clusters", len(grouped_dict)
-                    )
-                    return optgroups
-
-            transformed_results = transform_result_to_optgroups(results)
-            select_span.set_attribute(
-                "transformed_results_count", len(transformed_results)
-            )
-            return transformed_results
-
-
-api.add_resource(Graph_Data, "/graph_data")
-api.add_resource(Graph_Data_Select, "/graph_data_select")
-
-
-@app.route("/")
-def main_endpoint():
-    with tracer.start_as_current_span("main_endpoint") as main_span:
-        file_path = "application.json"
-        main_span.set_attribute("file_path", file_path)
-
-        # Read the JSON file
-        with tracer.start_as_current_span("read_json_file"):
-            with open(file_path, "r") as file:
-                data = json.load(file)
-            print("Is production environment?", data["is_production_environment"])
-
-        main_span.set_attribute(
-            "is_production_environment", data["is_production_environment"]
-        )
-
-        if data["is_production_environment"] == True:
-            api_server_url = "https://kg-api-sigma.vercel.app"
-        else:
-            api_server_url = "http://127.0.0.1:5000"
-
-        main_span.set_attribute("api_server_url", api_server_url)
-        return render_template("d3/index.html", api_server_url=api_server_url)
-
-
-@app.after_request
-def add_cors_headers(response):
-    response.headers["Access-Control-Allow-Origin"] = "*"
-    return response
+        return jsonify(transformed_results)
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", debug=True)
+    app.run(host="0.0.0.0", port=5001, debug=True)

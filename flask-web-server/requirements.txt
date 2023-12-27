@@ -1,0 +1,12 @@
+# Flask and extensions
+flask
+flask_restful
+
+# HTTP requests
+requests
+
+# OpenTelemetry packages
+opentelemetry-api
+opentelemetry-sdk
+opentelemetry-exporter-otlp-proto-grpc
+opentelemetry-instrumentation-flask
