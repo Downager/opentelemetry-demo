@@ -1,6 +1,6 @@
 # OpenTelemetry Demo
-This project is an example of how to set up open telemetry with your Python application. 
-    ![](./screenshots/dfd.png)
+This project is an example of how to set up open telemetry with your Python application.
+![](./screenshots/dfd.jpg)
 ## Prerequisites
 - Docker
 - Docker Compose
