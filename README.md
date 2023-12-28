@@ -1,6 +1,6 @@
 # OpenTelemetry Demo
 This project is an example of how to set up open telemetry with your Python application. 
-
+    ![](./screenshots/dfd.png)
 ## Prerequisites
 - Docker
 - Docker Compose
@@ -26,34 +26,35 @@ This Python app allows you to demo how open telemetry works. It consists of seve
 
 ### Functional requirement
 
-|   | 功能 | 
-|---| --- | 
-| 1 | 使用opentelemetry, tempo, prometheus, grafana 記錄數效能及事件logging |  
-| 2 | 以D3.js 來顯示關鍵字之間的關連 |  
-| 3 | Filter: 選取及顯示特定關鍵字 |  
-| 4 | Filter: 調整顯示的關鍵字數量 |  
-| 5 | Filter: 調整顯示的關鍵字來源年份 |  
-| 6 | Filter: 調整顯示的關鍵字最低的共現數 |  
-| 7 | 以Neo4j 圖像DB 來存關鍵字資料 |  
+|   | 功能                                                          | 
+|---|-------------------------------------------------------------| 
+| 1 | 以D3.js 來顯示知識圖關鍵字之間的關連         |  
+| 2 |  使用opentelemetry, tempo, prometheus, grafana 記錄數效能及事件logging  |  
+| 3 | Filter: 選取及顯示特定關鍵字                                          |  
+| 4 | Filter: 調整顯示的關鍵字數量                                          |  
+| 5 | Filter: 調整顯示的關鍵字來源年份                                        |  
+| 6 | Filter: 調整顯示的關鍵字最低的共現數                                      |  
+| 7 | 以Neo4j 圖像DB 來存關鍵字資料                                         |  
 
 ### Non-Functional requirement
 
-|  |  功能 | Supporting Description |
-| --- | --- | --- |
-| 1 | load-balancing | 我們有三個 python container, 如nginx, web-server, db-service |
+|  |  功能 | Supporting Description                               |
+| --- | --- |------------------------------------------------------|
+| 1 | load-balancing | 三個 python container: nginx, web-server, db-service |
 
 ### trace
 |    | trace | Supporting Description |
 |----| --- | --- |
-| 1  | api_server_url | server 的位置 |
-| 2  | file_path | configure 的位置 |
-| 3  | is_production_environment | 是不是在production 環境 |
-| 4  | selected_items | Filter: 選取及顯示特定關鍵字 |
-| 5  | limit | Filter: 調整顯示的關鍵字數量 |
-| 6  | skip | Filter: 為關鍵字的分頁顯示功能 |
-| 7  | years | Filter: 調整顯示的關鍵字來源年份 |
-| 8  | co-occurrence | Filter: 調整顯示的關鍵字最低的共現數 |
-| 9  | condition | 資料庫的select 條件 |
+
+| 1  | is_production_environment | 是不是在production 環境 |
+| 2  | selected_items | Filter: 選取及顯示特定關鍵字 |
+| 3  | limit | Filter: 調整顯示的關鍵字數量 |
+| 4  | skip | Filter: 為關鍵字的分頁顯示功能 |
+| 5  | years | Filter: 調整顯示的關鍵字來源年份 |
+| 6  | co-occurrence | Filter: 調整顯示的關鍵字最低的共現數 |
+| 7  | condition | 資料庫的select 條件 |
+| 8  | api_server_url | back-end server 的IP位置 |
+| 9  | file_path | configure 的位置 |
 | 10 | cypher_query | Neo4j Database query |
 | 11 | result_count | 資料庫search result 的筆數 |
 | 12 | datarun_id | project 的唯一區別ID |
@@ -65,7 +66,7 @@ This Python app allows you to demo how open telemetry works. It consists of seve
 ## Usage
 After setting up the services, you can generate traces by making requests to the app:
 
-     http://localhost:5000/ 
+     http://127.0.0.1:5000/ 
 
 To view the traces:
 
