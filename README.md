@@ -45,7 +45,6 @@ This Python app allows you to demo how open telemetry works. It consists of seve
 ### trace
 |    | trace | Supporting Description |
 |----| --- | --- |
-
 | 1  | is_production_environment | 是不是在production 環境 |
 | 2  | selected_items | Filter: 選取及顯示特定關鍵字 |
 | 3  | limit | Filter: 調整顯示的關鍵字數量 |
