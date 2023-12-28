@@ -1,20 +1,74 @@
 # OpenTelemetry Demo
+This project is an example of how to set up open telemetry with your Python application. 
 
 ## Prerequisites
 - Docker
 - Docker Compose
 - Python3
 
-## Components
+## Installation
+Make sure you have Docker installed. Then, clone the repo and run the following command.
+
+    docker compose up --build -d
+
+This will build and start the following services:
+
 - Grafana Tempo: Distributed tracing backend
 - Prometheus: Metrics backend
 - Grafana: Visualization frontend
+- Python Example App
 
-## How to run?
-1. Run `docker compose up --build -d` to start the services (Python Example App, Grafana Tempo, Prometheus, Grafana)
-1. curl http://localhost:8080/ and http://localhost:8080/another to generate some traces
+## Functionality
+This Python app allows you to demo how open telemetry works. It consists of several endpoints that demonstrate different functionalities and creates a unique trace for each bit. Here is a brief description of each of the functionalities:
+
+- **Tracing**: Tracks the requests and shows a detailed report of each step.
+- **Filter**: Allows you to filter the traces based on different parameters.
+
+### Functional requirement
+
+|   | 功能 | 
+|---| --- | 
+| 1 | 使用opentelemetry, tempo, prometheus, grafana 記錄數效能及事件logging |  
+| 2 | 以D3.js 來顯示關鍵字之間的關連 |  
+| 3 | Filter: 選取及顯示特定關鍵字 |  
+| 4 | Filter: 調整顯示的關鍵字數量 |  
+| 5 | Filter: 調整顯示的關鍵字來源年份 |  
+| 6 | Filter: 調整顯示的關鍵字最低的共現數 |  
+| 7 | 以Neo4j 圖像DB 來存關鍵字資料 |  
+
+### Non-Functional requirement
+
+|  |  功能 | Supporting Description |
+| --- | --- | --- |
+| 1 | load-balancing | 我們有三個 python container, 如nginx, web-server, db-service |
+
+### trace
+|    | trace | Supporting Description |
+|----| --- | --- |
+| 1  | api_server_url | server 的位置 |
+| 2  | file_path | configure 的位置 |
+| 3  | is_production_environment | 是不是在production 環境 |
+| 4  | selected_items | Filter: 選取及顯示特定關鍵字 |
+| 5  | limit | Filter: 調整顯示的關鍵字數量 |
+| 6  | skip | Filter: 為關鍵字的分頁顯示功能 |
+| 7  | years | Filter: 調整顯示的關鍵字來源年份 |
+| 8  | co-occurrence | Filter: 調整顯示的關鍵字最低的共現數 |
+| 9  | condition | 資料庫的select 條件 |
+| 10 | cypher_query | Neo4j Database query |
+| 11 | result_count | 資料庫search result 的筆數 |
+| 12 | datarun_id | project 的唯一區別ID |
+| 13 | number_of_clusters | 關鍵字分群的群組數量 |
+| 14 | transformed_results_count | 轉換為D3.js 格式後的資料數量 |
+
+
+
+## Usage
+After setting up the services, you can generate traces by making requests to the app:
+
+     http://localhost:5000/ 
+
+To view the traces:
+
 1. Open Grafana at http://localhost:3000/
-1. Open the Explore page and select Tempo as the data source
-    ![](./screenshots/001.png)
-1. Click the Run query button to see the traces
-    ![](./screenshots/002.png)
+2. Open the Explore page and select Tempo as the data source
+3. Click the Run query button to see the traces
